@@ -78,7 +78,7 @@ viewValidation model =
     if String.length model.password < 8 then
         div [ style "color" " orange" ] [ text "Check that the password is longer than 8 characters." ]
 
-    else if isValid model.password > 0 then
+    else if isInvalid model.password then
         div [ style "color" " orange" ] [ text "Make sure the password contains upper case, lower case, and numeric characters." ]
 
     else if model.password == model.passwordAgain then
@@ -92,9 +92,11 @@ test =
     "hello"
 
 
-isValid : String -> String -> Int
-isValid password =
-    String.filter Char.isDigit
-        |> String.filter Char.isUpper
-        |> String.filter Char.isLower
-        |> String.length
+isInvalid : String -> Bool
+isInvalid password =
+    String.length (String.filter Char.isDigit password)
+        == 0
+        || String.length (String.filter Char.isUpper password)
+        == 0
+        || String.length (String.filter Char.isLower password)
+        == 0
